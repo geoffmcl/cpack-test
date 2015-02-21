@@ -18,4 +18,5 @@ install_manifest.txt
 *.opensdf
 *.sdf
 *.sln
+*.suo
 
