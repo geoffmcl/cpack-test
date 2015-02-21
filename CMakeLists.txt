@@ -89,7 +89,12 @@ endif ()
 install( TARGETS ${name} DESTINATION bin )
 install(FILES ${${name}_HDRS} DESTINATION include)
 
-set(CPACK_GENERATOR "NSIS")
+if (WIN32)
+    set(CPACK_GENERATOR "NSIS")
+else ()
+    set(CPACK_GENERATOR "DEB")
+    set(CPACK_SOURCE_GENERATOR "TGZ")
+endif ()
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Geoff R. McLane") #required
 set(CPACK_PACKAGE_VERSION "${test-cpack_MAJOR}.${test-cpack_MINOR}.${test-cpack_POINT}")
 set(CPACK_PACKAGE_VERSION_MAJOR "${test-cpack_MAJOR}")
@@ -104,3 +109,4 @@ set(CPACK_SOURCE_IGNORE_FILES "${CMAKE_SOURCE_DIR}/build/;${CMAKE_SOURCE_DIR}/.g
 include(CPack)
 
 # eof
+
