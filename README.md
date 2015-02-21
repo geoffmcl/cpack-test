@@ -1,14 +1,13 @@
 # CPack Test
 
-Just a simple test of using CMake CPack to package the project for distribution. This is of 
-no concern for the casual builder. This test-app binary does really nothing. It is a 
+Just a simple test of using <a target="_blank" href="http://www.cmake.org/">CMake</a> CPack to package the project for distribution. This is of 
+no use or concern for the casual builder. This test-app binary does really nothing. It is a 
 test of package building and a source distribution zip.
 
 ## Building
 
-This simple CPack Test is built using [CMake][1] as the configuration and generation of native build files.
-
-   [1]: http://www.cmake.org/
+This simple CPack Test is built using <a target="_blank" href="http://www.cmake.org/">CMake</a> as the configuration and generation of 
+native build files.
 
 - In Unix/OSX
 
@@ -32,7 +31,7 @@ This simple CPack Test is built using [CMake][1] as the configuration and genera
 
 - Alterntatively, using cmake-gui
 
-1. `Load GUI'
+1. `Load GUI`
 
 2. `Set path to source`
 
@@ -42,7 +41,7 @@ This simple CPack Test is built using [CMake][1] as the configuration and genera
 
 5. `Click [Configure]` Maybe needed more than once
 
-6. 'Click [Generation]`
+6. `Click [Generation]`
 
 7. `Load or run build tools`
 
