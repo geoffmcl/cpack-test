@@ -52,18 +52,28 @@ proceed with the building of various configurations.
 
 This is the extra step to generate the distribution package
 
-- cmake --build . --config Release --target PACKAGE
+- Windows
 
-In windows thsi should generate a test-cpack-3.0.0-win32.exe using NSIS, for installing the exe, and 
+`cmake --build . --config Release --target PACKAGE`
+
+In windows this should generate a test-cpack-3.0.0-win32.exe, using NSIS, if installed, and available, 
+for installing the exe, and the headers, or other dev components...
+
+- Unix/OS-X
+
+`make package`
+
+In linux this shoudl generate a test-cpack-3.0.0-Linux.deb, for installing the binary, and 
 the headers, or other dev components...
 
 ## Source Packaging
 
-To generate the source archive, a zip in this case -
+To generate the source archive, a zip in windows, and a tar.gz in linux -
 
-- cpack --config CPackSourceConfig.cmake
+`cpack --config CPackSourceConfig.cmake`
 
-This should generate a source zip for distribution. Take care all backup files 
-are removed before running this.
+This should generate a source archive for distribution. Take care all backup files and 
+other non-source files are removed before running this. All items is the .git and 
+build directories are already ignored.
 
 ;eof
