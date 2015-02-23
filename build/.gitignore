@@ -23,4 +23,5 @@ Makefile
 test-app
 test-cpack-3.0.0-Linux.deb
 test-cpack-3.0.0-Source.tar.gz
+ipch/*
 

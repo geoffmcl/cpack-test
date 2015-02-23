@@ -24,7 +24,12 @@ cmake --build . --config Release >> %TMPLOG% 2>&1
 @echo *** Continue with install? to %TMPINST%
 @echo.
 @pause
+
+cmake --build . --config Debug --target INSTALL >> %TMPLOG% 2>&1
+@if ERRORLEVEL 1 goto ERR4
+
 cmake --build . --config Release --target INSTALL >> %TMPLOG% 2>&1
+@if ERRORLEVEL 1 goto ERR5
 
 @fa4 " -- " %TMPLOG%
 
@@ -44,6 +49,14 @@ cmake --build . --config Release --target INSTALL >> %TMPLOG% 2>&1
 
 :ERR3
 @echo cmake build Release ERROR!
+@goto END
+
+:ERR4
+@echo install debug ERROR!
+@goto END
+
+:ERR5
+@echo install release ERROR!
 @goto END
 
 :END

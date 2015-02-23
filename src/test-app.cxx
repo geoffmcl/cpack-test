@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <string.h> // for strdup(), ...
-// other includes
+#include "sprtf.hxx"
 #include "test-app.hxx"
 
 static const char *module = "test-app";
@@ -17,9 +17,9 @@ static const char *usr_input = 0;
 
 void give_help( char *name )
 {
-    printf("%s: usage: [options] usr_input\n", module);
-    printf("Options:\n");
-    printf(" --help  (-h or -?) = This help and exit(2)\n");
+    SPRTF("%s: usage: [options] usr_input\n", module);
+    SPRTF("Options:\n");
+    SPRTF(" --help  (-h or -?) = This help and exit(2)\n");
     // TODO: More help
 }
 
@@ -43,20 +43,21 @@ int parse_args( int argc, char **argv )
                 break;
             // TODO: Other arguments
             default:
-                printf("%s: Unknown argument '%s'. Tyr -? for help...\n", module, arg);
+                SPRTF("%s: Unknown argument '%s'. Tyr -? for help...\n", module, arg);
                 return 1;
             }
         } else {
             // bear argument
             if (usr_input) {
-                printf("%s: Already have input '%s'! What is this '%s'?\n", module, usr_input, arg );
+                SPRTF("%s: Already have input '%s'! What is this '%s'?\n", module, usr_input, arg );
                 return 1;
             }
             usr_input = strdup(arg);
         }
     }
     if (!usr_input) {
-        printf("%s: No user input found in command!\n", module);
+        give_help(argv[0]);
+        SPRTF("%s: Error: No user input found in command!\n", module);
         return 1;
     }
     return 0;
@@ -74,6 +75,5 @@ int main( int argc, char **argv )
 
     return iret;
 }
-
 
 // eof = test-app.cxx

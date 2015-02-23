@@ -12,14 +12,11 @@ project( test-cpack )
 set( test-cpack_MAJOR 3 )
 set( test-cpack_MINOR 0 )
 set( test-cpack_POINT 0 )
-
+set( LIBUTIL_VERSION "${test-cpack_MAJOR}.${test-cpack_MINOR}.${test-cpack_POINT}" )
 
 # Allow developer to select is Dynamic or static library built
 set( LIB_TYPE STATIC )  # set default static
-option( BUILD_SHARED_LIB "Build Shared Library" OFF )
-# EXPERIMENTAL - Turn ON to combine library into EXE - above shared library MUST be OFF
-option( BUILD_AS_ONE "Build as one. Combine library into EXE" OFF )
-
+option( BUILD_SHARED_LIB "Set OFF to build static Library" ON )
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     set( WARNING_FLAGS -Wall )
@@ -60,11 +57,37 @@ if(BUILD_SHARED_LIB)
    message(STATUS "*** Building DLL library ${LIB_TYPE}")
 else()
    message(STATUS "*** Option BUILD_SHARED_LIB is OFF ${LIB_TYPE}")
+   add_definitions( -DUTILS_LIB_STATIC )
 endif()
+#################################################
+##### LIBRARY #####
+#################################################
+set(name test-utils)
+set(dir src/lib)
+include_directories( ${dir} )
+set(${name}_SRCS
+    ${dir}/sprtf.cxx
+    )
+set(${name}_HDRS
+    ${dir}/sprtf.hxx
+    )
+add_library( ${name} ${LIB_TYPE} ${${name}_SRCS} ${${name}_HDRS} )
+list( APPEND add_LIBS ${name} )
+set_target_properties(${name} PROPERTIES COMPILE_FLAGS "-DBUILDING_UTIL_LIB")
+set_target_properties(${name} PROPERTIES
+    VERSION   ${LIBUTIL_VERSION}
+    SOVERSION ${test-cpack_MAJOR}
+    )
+install(TARGETS ${name}
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    )
+install(FILES ${${name}_HDRS} DESTINATION include)
+
 #################################################
 ##### EXECUTABLE #####
 #################################################
-
 # test-app EXECUTABLE from [F:\Projects\test-cpack\src],
 # have 1 C/C++ sources, 1 headers
 set(name test-app)
@@ -91,6 +114,8 @@ install(FILES ${${name}_HDRS} DESTINATION include)
 
 if (WIN32)
     set(CPACK_GENERATOR "NSIS")
+elseif ( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
+    set(CPACK_GENERATOR "PackageMake")
 else ()
     set(CPACK_GENERATOR "DEB")
     set(CPACK_SOURCE_GENERATOR "TGZ")
