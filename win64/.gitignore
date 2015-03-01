@@ -15,3 +15,5 @@ install_manifest.txt
 test-cpack-3.0.0-win64.exe
 *.sln
 x64/*
+qrc_icons.cxx
+src/*
