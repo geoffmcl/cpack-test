@@ -16,7 +16,8 @@ set( LIBUTIL_VERSION "${test-cpack_MAJOR}.${test-cpack_MINOR}.${test-cpack_POINT
 
 # Allow developer to select is Dynamic or static library built
 set( LIB_TYPE STATIC )  # set default static
-option( BUILD_SHARED_LIB "Set OFF to build static Library" ON )
+option( BUILD_SHARED_LIB "Set OFF to build static Library"          ON )
+option( USE_WIX_TOOLSET  "Set ON to build a Windows MSI installer" OFF )
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     set( WARNING_FLAGS -Wall )
@@ -226,10 +227,17 @@ else ()
 endif ()
 
 ########################################################
-### PACKAGING ###
-#######################################################
+###                   PACKAGING                      ###
+### This is a quite INCOMPLETE set of variables that ###
+### should be set for the various generators.        ###
+### Consult the CPack documentations for a full set. ###
+########################################################
 if (WIN32)
-    set(CPACK_GENERATOR "NSIS")
+    if (USE_WIX_TOOLSET)
+        set(CPACK_GENERATOR "WIX") # this need WiX Tooset installed and a path to candle.exe
+    else ()
+        set(CPACK_GENERATOR "NSIS") # this needs NSIS installed, and available
+    endif ()
     set(CPACK_SOURCE_GENERATOR "ZIP")
 elseif ( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
     set(CPACK_GENERATOR "PackageMake")
@@ -245,10 +253,11 @@ set(CPACK_PACKAGE_VERSION_MAJOR "${test-cpack_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${test-cpack_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${test-cpack_POINT}")
 
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.html")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
-set(CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/README.md")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
+set(CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/README.html")
+
 set(CPACK_SOURCE_IGNORE_FILES "${CMAKE_SOURCE_DIR}/build/;${CMAKE_SOURCE_DIR}/.git/")
 
 include(CPack)
