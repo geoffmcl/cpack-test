@@ -27,4 +27,6 @@ ipch/*
 libtest-utils.so*
 qrc_icons.cxx
 src/*
+*.wixobj
+test-cpack-3.0.0-win32.msi
 
