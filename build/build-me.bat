@@ -7,6 +7,8 @@
 @set TMPOPTS=
 @set TMPOPTS=%TMPOPTS% -DCMAKE_INSTALL_PREFIX=%TMPINST%
 
+@call setupqt32
+
 @echo %TMPSRC% %DATE% %TIME% > %TMPLOG%
 
 cmake %TMPSRC% %TMPOPTS% >> %TMPLOG% 2>&1
