@@ -1,0 +1,6 @@
+bldlog-1.txt
+CPackConfig.cmake
+CPackSourceConfig.cmake
+install_manifest.txt
+test-cpack-3.0.0-win64.exe
+_CPack_Packages
