@@ -9,4 +9,9 @@ test-app
 test-cpack-3.0.0-Linux.deb
 test-cpack-3.0.0-Source.tar.gz
 qrc_icons.cxx
+libtest-utils.so
+libtest-utils.so.3
+libtest-utils.so.3.0.0
+src
+fgx-installer
 
