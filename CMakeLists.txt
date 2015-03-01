@@ -112,19 +112,139 @@ endif ()
 install( TARGETS ${name} DESTINATION bin )
 install(FILES ${${name}_HDRS} DESTINATION include)
 
+#######################################################
+### A QT APP ###
+# Add LINUX or WINDOWS definitions
+if(UNIX)
+   add_definitions( -DLINUX )
+else(UNIX)
+   add_definitions( -DWINDOWS )
+endif(UNIX)
+# QT = core gui script network
+set( QT_COMPONENTS QtCore QtGui QtNetwork QtScript QtScriptTools )
+message(STATUS "*** Finding Qt4 components COMPONENTS ${QT_COMPONENTS}")
+#  Qt4_FOUND        If false, don't try to use Qt 4.
+find_package ( Qt4 COMPONENTS QtCore QtGui QtNetwork QtScript QtScriptTools )
+if (Qt4_FOUND)
+    include ( ${QT_USE_FILE} )
+    add_definitions( ${QT_DEFINITIONS} )
+    # debug messages
+    message(STATUS "*** include ${QT_USE_FILE}")
+    message(STATUS "*** defs  ${QT_DEFINITIONS}")
+    message(STATUS "*** libs ${QT_LIBRARIES}")
+    message(STATUS "*** bindir ${QT_BINARY_DIR}")
+    if (WIN32)
+        set(QT_DLL_LIST)
+        set(CMAKE_FIND_LIBRARY_PREFIXES "")
+        set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
+        foreach(_dll ${QT_COMPONENTS})
+            set(_dll_dbg "${_dll}d4")
+            set(_dll_rel "${_dll}4")
+            find_library( ${_dll}_DBG_DLL
+                NAMES ${_dll_dbg}
+                PATHS ${QT_BINARY_DIR}
+                )
+            find_library( ${_dll}_REL_DLL
+                NAMES ${_dll_rel}
+                PATHS ${QT_BINARY_DIR}
+                )
+            if (${_dll}_DBG_DLL)
+                list(APPEND QT_DLL_LIST ${${_dll}_DBG_DLL})
+            endif ()
+            if (${_dll}_REL_DLL)
+                list(APPEND QT_DLL_LIST ${${_dll}_REL_DLL})
+            endif ()
+        endforeach()
+        message(STATUS "*** DLLS [${QT_DLL_LIST}]")
+    endif ()    
+    set( QT_USE_QTSCRIPT TRUE )
+    set( QT_USE_QTNETWORK TRUE )
+    
+    set(dir src/fgx-installer)
+    set( fgx-installer_SRCS
+        ${dir}/main.cpp
+        ${dir}/mainwindow.cpp
+        ${dir}/releases/releaseswidget.cpp
+        ${dir}/info/machineinfowidget.cpp
+        ${dir}/releases/releaseeditdialog.cpp
+        ${dir}/xobjects/xsettings.cpp
+        ${dir}/xobjects/servercall.cpp
+        ${dir}/xwidgets/xstatusbar.cpp
+        ${dir}/aircraft/aircrafttreewidget.cpp
+        ${dir}/download/downloadmanagerwidget.cpp
+        )
+    set( fgx-installer_HDRS
+        ${dir}/mainwindow.h
+        ${dir}/releases/releaseswidget.h
+        ${dir}/info/machineinfowidget.h
+        ${dir}/releases/releaseeditdialog.h
+        ${dir}/xobjects/xsettings.h
+        ${dir}/xobjects/servercall.h
+        ${dir}/xwidgets/xstatusbar.h
+        ${dir}/aircraft/aircrafttreewidget.h
+        ${dir}/download/downloadmanagerwidget.h
+        )
+    set( fgx-installer_RCS
+        ${dir}/resource/icons.qrc
+        )
+
+    include_directories(
+        ${dir}
+        ${dir}/resource
+        ${dir}/info
+        ${dir}/xwidgets
+        ${dir}/xobjects
+        ${dir}/aircraft
+        ${dir}/releases
+        ${dir}/download
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${QT_INCLUDE_DIR}
+        )
+    # Added for DEBUG only
+    get_property(inc_dirs DIRECTORY PROPERTY INCLUDE_DIRECTORIES)
+    message(STATUS "*** inc_dirs = ${inc_dirs}")
+
+    QT4_WRAP_CPP( fgx-installer_HDRS_MOC ${fgx-installer_HDRS} )
+    QT4_ADD_RESOURCES( fgx-installer_RESOURCES_RCC ${fgx-installer_RCS} )
+
+    add_executable( fgx-installer
+        ${fgx-installer_SRCS}
+        ${fgx-installer_HDRS_MOC}
+        ${fgx-installer_RESOURCES_RCC} 
+        )
+    target_link_libraries( fgx-installer ${QT_LIBRARIES} )
+    if (MSVC)
+        set_target_properties( fgx-installer PROPERTIES DEBUG_POSTFIX d )
+    endif ()
+    # deal with install 
+    install(TARGETS fgx-installer DESTINATION bin )
+    if (WIN32)
+        install(FILES ${QT_DLL_LIST} DESTINATION bin)
+    endif ()    
+else ()
+    message(STATUS "*** Qt4 NOT FOUND!")
+endif ()
+
+########################################################
+### PACKAGING ###
+#######################################################
 if (WIN32)
     set(CPACK_GENERATOR "NSIS")
+    set(CPACK_SOURCE_GENERATOR "ZIP")
 elseif ( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
     set(CPACK_GENERATOR "PackageMake")
 else ()
     set(CPACK_GENERATOR "DEB")
     set(CPACK_SOURCE_GENERATOR "TGZ")
 endif ()
+
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Geoff R. McLane") #required
+
 set(CPACK_PACKAGE_VERSION "${test-cpack_MAJOR}.${test-cpack_MINOR}.${test-cpack_POINT}")
 set(CPACK_PACKAGE_VERSION_MAJOR "${test-cpack_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${test-cpack_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${test-cpack_POINT}")
+
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/README.md")
@@ -134,4 +254,3 @@ set(CPACK_SOURCE_IGNORE_FILES "${CMAKE_SOURCE_DIR}/build/;${CMAKE_SOURCE_DIR}/.g
 include(CPack)
 
 # eof
-
