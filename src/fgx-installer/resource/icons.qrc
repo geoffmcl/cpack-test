@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file alias="rel_add">brick_add.png</file>
+        <file alias="rel_delete">brick_delete.png</file>
+        <file alias="rel_edit">brick_edit.png</file>
+        <file alias="rel">brick.png</file>
+        <file alias="fgx-installer">briefcase.png</file>
+        <file alias="refresh">arrow_refresh.png</file>
+        <file alias="refresh2">refresh.gif</file>
+        <file alias="close_tab">close_grey.png</file>
+    </qresource>
+</RCC>
