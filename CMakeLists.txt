@@ -8,10 +8,17 @@ cmake_minimum_required( VERSION 2.8.8 )
 
 project( test-cpack )
 
-# The version number.
-set( test-cpack_MAJOR 3 )
-set( test-cpack_MINOR 0 )
-set( test-cpack_POINT 0 )
+# ### NOTE: *** Adjust version.txt when required ***
+# read 'version' file into a variable (stripping any newlines or spaces)
+file(READ version.txt versionFile)
+if (NOT versionFile)
+    message(FATAL_ERROR "Unable to determine version. version.txt file is missing.")
+endif()
+string(STRIP "${versionFile}" TEST_VERSION)
+string(REPLACE "." ";" VERSION_LIST ${TEST_VERSION})
+list(GET VERSION_LIST 0 test-cpack_MAJOR)
+list(GET VERSION_LIST 1 test-cpack_MINOR)
+list(GET VERSION_LIST 2 test-cpack_POINT)
 set( LIBUTIL_VERSION "${test-cpack_MAJOR}.${test-cpack_MINOR}.${test-cpack_POINT}" )
 
 # Allow developer to select is Dynamic or static library built
