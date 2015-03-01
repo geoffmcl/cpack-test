@@ -1,0 +1,17 @@
+*.vcxproj
+*.filters
+*.user
+CMakeCache.txt
+CMakeFiles/*
+CPackConfig.cmake
+CPackSourceConfig.cmake
+Debug/*
+Release/*
+_CPack_Packages/*
+bldlog-1.txt
+cmake_install.cmake
+install_manifest.txt
+*.dir/*
+test-cpack-3.0.0-win64.exe
+*.sln
+x64/*
