@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+h1 {
+    background-color: #6495ed;
+}
+
+code {
+    background-color: #e0ffff;
+}
+
+div {
+    background-color: #b0c4de;
+}
+</style>
+</head>
+<body>
+<h1>CPack Test</h1>
+
+<p>Just a simple test of using <a target="_blank" href="http://www.cmake.org/">CMake</a> CPack to package the project for distribution. This is of 
+no use or concern for the casual builder. This test-app binary does really nothing. It is a 
+test of package building and a source distribution zip.</p>
+
+<h2>Building</h2>
+
+<p>This simple CPack Test is built using <a target="_blank" href="http://www.cmake.org/">CMake</a> as the configuration and generation of 
+native build files.</p>
+
+<h4>In Unix/OSX</h4>
+
+<ol>
+<li><p><code>cd build</code></p></li>
+<li><p><code>cmake .. [-DCMAKE_INSTALL_PREFIX=/root/path/for/install] [-G "Generator of choice"]</code></p></li>
+<li><p><code>make</code></p></li>
+<li><p><code>[sudo] make install</code></p></li>
+</ol>
+
+<h4>In Windows</h4>
+
+<ol>
+<li><p><code>cd build</code></p></li>
+<li><p><code>cmake .. [-DCMAKE_INSTALL_PREFIX=/root/path/for/install] [-G "Generator of choice"]</code></p></li>
+<li><p><code>cmake --build . --config Release</code></p></li>
+<li><p><code>cmake --build . --config Release --target INSTALL</code></p></li>
+</ol>
+
+<h4>Alterntatively, using cmake-gui</h4>
+
+<ol>
+<li><p><code>Load GUI</code></p></li>
+<li><p><code>Set path to source</code></p></li>
+<li><p><code>Set path to source/build folder</code></p></li>
+<li><p><code>Choose/Set Generator of choice</code></p></li>
+<li><p><code>Click [Configure]</code> Maybe needed more than once</p></li>
+<li><p><code>Click [Generation]</code></p></li>
+<li><p><code>Load or run build tools</code></p></li>
+</ol>
+
+<p>For example, if in Windows with MSVC installed, this last step would be to load the MSVC IDE, and load the test-cpack.sln file, and proceed with the building of various configurations.</p>
+
+<h2>Package Building</h2>
+
+<p>This is the extra step to generate the distribution package</p>
+
+<h4>Windows</h4>
+
+<p><code>cmake --build . --config Release --target PACKAGE</code></p>
+
+<p>In windows this should generate a test-cpack-3.0.0-win32.exe, using NSIS, if installed, and available, or a test-cpack-3.0.0-win32.msi, using WIX, if installed and available, for installing the exe, and the headers, or other dev components...</p>
+
+<h4>Unix/OS-X</h4>
+
+<p><code>make package</code></p>
+
+<p>In linux this shoudl generate a test-cpack-3.0.0-Linux.deb, for installing the binary, and 
+the headers, or other dev components...</p>
+
+<h2>Source Packaging</h2>
+
+<p>To generate the source archive, a zip in windows, and a tar.gz in linux -</p>
+
+<p><code>cpack --config CPackSourceConfig.cmake</code></p>
+
+<p>This should generate a source archive for distribution. Take care all backup files and 
+other non-source files are removed before running this. All items is the .git and 
+build directories are already ignored.</p>
+
+<h2>Additional Notes</h2>
+
+<p>In Windows the CPack generators normally include -</p>
+
+<ol>
+<li><strong>NSIS</strong> - (Nullsoft Scriptable Install System) - Generates an installer EXE - see <a target="_blank" href="http://nsis.sourceforge.net/Main_Page">nsis.sourceforge</a> - needs to be installed.</li>
+<li><strong>WIX</strong> - WiX Toolset - Generates an installer MSI - see <a target="_blank" href="  https://wix.codeplex.com/releases/view/610859">wix.codeplex</a> - needs to be installed and a PATH added to candle.exe</li>
+</ol>
+
+<p>Both these generator need special variables set in the CMakeLists.txt file before including the CPack module.</p>
+
+<p>;eof</p>
+</body>
+</html>
