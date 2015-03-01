@@ -8,4 +8,5 @@ test-cpack-3.0.0-Source.zip
 test-app
 test-cpack-3.0.0-Linux.deb
 test-cpack-3.0.0-Source.tar.gz
+qrc_icons.cxx
 
